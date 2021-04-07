@@ -55,7 +55,8 @@ interface VatLike {
     function hope(address) external;
     function move(address, address, uint) external;
     
-    function healTeam() external note auth returns (uint256 oldTeamDebt);
+    function healTeam() external returns (uint256);
+    function teamAddress() external returns (address);
 }
 
 interface GemJoinLike {
@@ -985,6 +986,6 @@ contract DssProxyActionsDsr is Common {
         uint256 debt = VatLike(vat).healTeam();
         
         //TODO change address(airdrop3) to team address，问题是team address放在哪里，如何通过治理更改
-        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress, debt);
+        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress(), debt);
     }
 }
