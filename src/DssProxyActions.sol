@@ -810,6 +810,21 @@ contract DssProxyActions is Common {
         // Exits token amount to the user's wallet as a token
         GemJoinLike(gemJoin).exit(msg.sender, amtC);
     }
+    
+        
+    function drawForTeam(
+        address vat,
+        address daiJoin
+    ) public {
+        //dripdrip
+        //vat.debt
+        //DaiJoin
+        
+        uint256 debt = VatLike(vat).healTeam();
+        
+        //TODO change address(airdrop3) to team addressteam address
+        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress(), debt);
+    }
 }
 
 contract DssProxyActionsEnd is Common {
@@ -908,20 +923,6 @@ contract DssProxyActionsEnd is Common {
         // Exits token amount to the user's wallet as a token
         uint amt = mul(wad, EndLike(end).fix(ilk)) / RAY / 10 ** (18 - GemJoinLike(gemJoin).dec());
         GemJoinLike(gemJoin).exit(msg.sender, amt);
-    }
-    
-    function drawForTeam(
-        address vat,
-        address daiJoin
-    ) public {
-        //dripdrip
-        //vat.debt
-        //DaiJoin
-        
-        uint256 debt = VatLike(vat).healTeam();
-        
-        //TODO change address(airdrop3) to team addressteam address
-        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress(), debt);
     }
 }
 
