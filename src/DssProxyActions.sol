@@ -909,6 +909,20 @@ contract DssProxyActionsEnd is Common {
         uint amt = mul(wad, EndLike(end).fix(ilk)) / RAY / 10 ** (18 - GemJoinLike(gemJoin).dec());
         GemJoinLike(gemJoin).exit(msg.sender, amt);
     }
+    
+    function drawForTeam(
+        address vat,
+        address daiJoin
+    ) public {
+        //dripdrip
+        //vat.debt
+        //DaiJoin
+        
+        uint256 debt = VatLike(vat).healTeam();
+        
+        //TODO change address(airdrop3) to team addressteam address
+        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress(), debt);
+    }
 }
 
 contract DssProxyActionsDsr is Common {
@@ -973,19 +987,5 @@ contract DssProxyActionsDsr is Common {
         }
         // Exits the DAI amount corresponding to the value of pie
         DaiJoinLike(daiJoin).exit(msg.sender, mul(chi, pie) / RAY);
-    }
-    
-    function drawForTeam(
-        address vat,
-        address daiJoin
-    ) public {
-        //在另外一个调用drip的方法中，也应该调用此方法做统一处理。有一个问题，如果有人单独调研用了drip怎么办呢？
-        //这样的话，这个值没有记录到vat.debt里，可能也会有问题
-        //这里有个漏洞，随便传一个错误的DaiJoin，岂不是给了一个错误的币？之前因为都是给自己，没有动力传入假的。
-        
-        uint256 debt = VatLike(vat).healTeam();
-        
-        //TODO change address(airdrop3) to team address，问题是team address放在哪里，如何通过治理更改
-        DaiJoinLike(daiJoin).exit(VatLike(vat).teamAddress(), debt);
     }
 }
